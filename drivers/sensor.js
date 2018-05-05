@@ -109,7 +109,7 @@ function mapValue(device, cap, val) {
 function update(signal) {
 	let result = signal.getResult();
 	if (typeof result !== 'string' && result != null) {
-		let when = result.lastupdate.toString();
+		let when = result.lastupdate.toLocaleString('sv-se', { timeZone: 'Europe/Stockholm' });
 		let did = result.protocol + ':' + result.id + ':' + (result.channel || 0);
 		if (Sensors.get(did) === undefined) {
 			Sensors.set(did, { raw: { data: {} } });
