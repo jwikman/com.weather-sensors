@@ -21,7 +21,7 @@ var Devices = new Map(); // all devices that have been added
 
 const ACTIVE = 1;
 const INACTIVE = 2;
-var inactiveTime = 300000;
+var inactiveTime = 60*60*1000 //300000;
 var activityNotifications = 2;
 
 function updateAppSettings() {
@@ -271,6 +271,8 @@ function getSensorValue(what, id) {
 
 // heathCheck: check if sensor values keep being updated
 function healthCheck() {
+	utils.debug('InactiveTime: ', inactiveTime.toString());
+
 	let now = new Date();
 	// Iterate over sensors
 	Sensors.forEach((sensor, key) => {
@@ -286,7 +288,7 @@ function healthCheck() {
 	Devices.forEach((device, key) => {
 		// Check if the device needs to be set unavailable
 		if (device.available && now - Date.parse(device.update) > inactiveTime) {
-			utils.debug('Marking', key, 'as inactive');
+			utils.debug('Marking', key, 'as inactive. - Last updated: ', device.update, ' - Name: ', device.name);
 			device.driver.setUnavailable(device.device_data, __('error.no_data', { since: now }));
 			device.available = false;
 			if (activityNotifications & INACTIVE) {
